@@ -16,7 +16,7 @@ async def lifespan(fastapi: FastAPI):
 app = FastAPI(
     title="Shop API",
     version="1.0",
-    openapi_url="/swagger/openapi.json",
+    openapi_url="/swagger/index.html",
     docs_url="/swagger",
     lifespan=lifespan,
 )

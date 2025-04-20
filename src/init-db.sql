@@ -1,0 +1,2 @@
+CREATE USER "123" PASSWORD "123";
+CREATE DATABASE "shop-service-dev";
