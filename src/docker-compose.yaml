@@ -44,6 +44,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     entrypoint: ["nginx", "-g", "daemon off;"]
+    depends_on: 
+      - app
+    networks:
+      - net
 
 networks:
   net:
