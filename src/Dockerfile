@@ -1,9 +1,6 @@
 FROM python:3.10-slim
 LABEL author=klotzgal
 
-HEALTHCHECK --interval=5m --timeout=3s \
-    CMD curl -f http://localhost/health || exit 1
-
 ENV \
 	PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
