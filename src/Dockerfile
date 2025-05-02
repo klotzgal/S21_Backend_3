@@ -34,6 +34,5 @@ RUN chown -R 1001 /opt/ \
     && chmod u-s /usr/bin/newgrp
 
 USER 1001
-EXPOSE 8000
 
 ENTRYPOINT ["/bin/bash", "start.sh"]

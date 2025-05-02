@@ -28,8 +28,8 @@ http {
     #gzip  on;
 
     server {
-        server_name shop_service.ru;
-        listen 33333;
+        server_name $NGINX_HOST;
+        listen $NGINX_PORT;
         location / {
             root  /usr/share/nginx/static;
             index task.png index.html;
