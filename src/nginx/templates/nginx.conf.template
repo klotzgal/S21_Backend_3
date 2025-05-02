@@ -47,6 +47,12 @@ http {
             proxy_pass http://app:8000/swagger/index.html;
         }
 
+        location /pgadmin4 {
+            proxy_set_header X-Script-Name /pgadmin4;
+            proxy_set_header Host nginx;
+            proxy_pass http://pg_admin:5050/;
+        }
+
         location /status {
             stub_status on;
         }
