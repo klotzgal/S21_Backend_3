@@ -1,6 +1,8 @@
 FROM python:3.10-slim
 LABEL author=klotzgal
 
+ARG APP_PORT
+
 ENV \
 	PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
