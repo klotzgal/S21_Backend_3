@@ -1,24 +1,55 @@
 name: backend-03-klotzgal
 
 services:
-  app:
+  app1:
     build: .
-    container_name: app
+    image: backend-03-klotzgal-app
+    container_name: app1
     ports:
-      - "${APP_PORT}:8000"
+      - "7001:7001"
     environment:
+      - APP_PORT=7001
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=123
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=shop-service-dev
-    develop:
-      watch:
-        - path: .
-          action: sync
-          target: app
     depends_on: 
       - db
+    networks:
+      - net
+
+  app2:
+    image: backend-03-klotzgal-app
+    container_name: app2
+    ports:
+      - "7002:7002"
+    environment:
+      - APP_PORT=7002
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=123
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=shop-service-dev
+    depends_on: 
+      - app1
+    networks:
+      - net
+
+  app3:
+    image: backend-03-klotzgal-app
+    container_name: app3
+    ports:
+      - "7003:7003"
+    environment:
+      - APP_PORT=7003
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=123
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=shop-service-dev
+    depends_on: 
+      - app1
     networks:
       - net
 
@@ -45,6 +76,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "${PGADMIN_PORT}:80"
+    depends_on: 
+      - db
     networks:
       - net
 
@@ -63,7 +96,8 @@ services:
       # - ./nginx/templates:/etc/nginx/templates
       - ./static:/usr/share/nginx/static
     depends_on: 
-      - app
+      - app2
+      - app3
     networks:
       - net
 
