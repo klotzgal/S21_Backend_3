@@ -50,4 +50,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 postgres-data
+
+# MY
+*.venv
 *.env

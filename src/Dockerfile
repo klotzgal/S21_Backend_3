@@ -17,6 +17,7 @@ COPY app/pyproject.toml /opt/pyproject.toml
 RUN poetry install
 
 COPY start.sh /opt/start.sh
+COPY start_without_migrations.sh /opt/start_without_migrations.sh
 COPY app /opt/
 
 RUN chown -R 1001 /opt/ \
