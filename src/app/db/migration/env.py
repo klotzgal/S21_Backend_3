@@ -21,7 +21,6 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 # Для создания миграций без привязки к схеме
-target_metadata.schema = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
