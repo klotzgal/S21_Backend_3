@@ -111,12 +111,13 @@ services:
       NGINX_PORT: ${NGINX_PORT}
       # NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/
     ports:
-      - 80:${NGINX_PORT}
-      - 8000
+      - 80:80
+      - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       # - ./nginx/templates:/etc/nginx/templates
       - ./static:/usr/share/nginx/static
+      - ./ssl:/usr/share/nginx/ssl
     depends_on: 
       - app1
       - app2
