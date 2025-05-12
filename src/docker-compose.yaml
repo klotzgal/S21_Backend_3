@@ -8,7 +8,7 @@ services:
     image: backend-03-klotzgal-app
     container_name: app1
     ports:
-      - "7001:7001"
+      - "7001"
     environment:
       - APP_PORT=7001
       - POSTGRES_HOST=db
@@ -17,7 +17,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
-    depends_on: 
+    depends_on:
       db:
         condition: service_healthy
     networks:
@@ -30,7 +30,7 @@ services:
     image: backend-03-klotzgal-app
     container_name: app2
     ports:
-      - "7002:7002"
+      - "7002"
     environment:
       - APP_PORT=7002
       - POSTGRES_HOST=db
@@ -40,7 +40,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
     entrypoint: ["/bin/bash", "start_without_migrations.sh"]
-    depends_on: 
+    depends_on:
       db:
         condition: service_healthy
     networks:
@@ -53,7 +53,7 @@ services:
     image: backend-03-klotzgal-app
     container_name: app3
     ports:
-      - "7003:7003"
+      - "7003"
     environment:
       - APP_PORT=7003
       - POSTGRES_HOST=db
@@ -63,7 +63,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
     entrypoint: ["/bin/bash", "start_without_migrations.sh"]
-    depends_on: 
+    depends_on:
       db:
         condition: service_healthy
     networks:
@@ -97,7 +97,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    depends_on: 
+    depends_on:
       db:
         condition: service_started
     networks:
@@ -106,19 +106,14 @@ services:
   nginx:
     image: nginx:1.25.0
     container_name: nginx
-    environment:
-      NGINX_HOST: ${NGINX_HOST}
-      NGINX_PORT: ${NGINX_PORT}
-      # NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      # - ./nginx/templates:/etc/nginx/templates
       - ./static:/usr/share/nginx/static
       - ./ssl:/usr/share/nginx/ssl
-    depends_on: 
+    depends_on:
       - app1
       - app2
       - app3
