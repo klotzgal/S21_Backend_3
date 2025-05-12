@@ -4,3 +4,9 @@
 **/.ruff_cache
 **/__pycache__
 **/*.log
+static
+ssl
+postgres-data
+nginx
+**/*.sql
+**/*.md

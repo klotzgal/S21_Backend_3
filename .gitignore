@@ -54,3 +54,4 @@ postgres-data
 # MY
 *.venv
 *.env
+!example.env
