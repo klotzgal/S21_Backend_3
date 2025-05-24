@@ -1,0 +1,125 @@
+name: backend-03-klotzgal
+
+services:
+  app1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-03-klotzgal-app
+    container_name: app1
+    ports:
+      - "7001"
+    environment:
+      - APP_PORT=7001
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - net
+
+  app2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-03-klotzgal-app
+    container_name: app2
+    ports:
+      - "7002"
+    environment:
+      - APP_PORT=7002
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER_RO}
+      - POSTGRES_PASSWORD=${POSTGRES_RO_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+    entrypoint: ["/bin/bash", "start_without_migrations.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - net
+
+  app3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-03-klotzgal-app
+    container_name: app3
+    ports:
+      - "7003"
+    environment:
+      - APP_PORT=7003
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER_RO}
+      - POSTGRES_PASSWORD=${POSTGRES_RO_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+    entrypoint: ["/bin/bash", "start_without_migrations.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - net
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - net
+
+  pg_admin:
+    image: dpage/pgadmin4
+    container_name: pg_admin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - net
+
+  nginx:
+    image: nginx:1.25.0
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/usr/share/nginx/static
+      - ./ssl:/usr/share/nginx/ssl
+    depends_on:
+      - app1
+      - app2
+      - app3
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
